@@ -1,0 +1,4 @@
+type Mutation {
+  addTodo(content: String!): Todo!
+  deleteTodo(id: Int!): Todo!
+}

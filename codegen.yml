@@ -1,0 +1,10 @@
+overwrite: true
+schema: "server/interface/graphql/typedefs/**/*.graphql"
+generates:
+  server/interface/graphql/generated/schema.graphql:
+    plugins:
+      - schema-ast
+  server/interface/graphql/generated/graphql.ts:
+    plugins:
+      - "typescript"
+      - "typescript-resolvers"

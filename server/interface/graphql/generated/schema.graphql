@@ -1,0 +1,19 @@
+type Mutation {
+  addTodo(content: String!): Todo!
+  deleteTodo(id: Int!): Todo!
+}
+
+type Query {
+  hello: String!
+  viewer: User!
+  todos: [Todo!]
+}
+
+type Todo {
+  id: Int!
+  content: String!
+}
+
+type User {
+  name: String!
+}
