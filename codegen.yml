@@ -1,5 +1,6 @@
 overwrite: true
 schema: "server/interface/graphql/typedefs/**/*.graphql"
+documents: "client/src/libs/graphql/**/*.graphql"
 generates:
   server/interface/graphql/generated/schema.graphql:
     plugins:
@@ -8,3 +9,12 @@ generates:
     plugins:
       - "typescript"
       - "typescript-resolvers"
+  client/src/libs/graphql/generated/graphql.tsx:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-react-apollo"
+    config:
+      withHooks: true
+      withComponent: false
+      withHOC: false

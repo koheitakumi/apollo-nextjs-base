@@ -1,0 +1,6 @@
+mutation addTodo($content: String!) {
+  addTodo(content: $content) {
+    id
+    content
+  }
+}

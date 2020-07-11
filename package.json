@@ -9,7 +9,8 @@
     "codegen": "graphql-codegen --config codegen.yml",
     "codegen:watch": "graphql-codegen --config codegen.yml --watch",
     "dev:server": "yarn workspace server dev",
-    "dev": "concurrently \"yarn run codegen:watch\" \"yarn run dev:server\""
+    "dev:client": "yarn workspace client dev",
+    "dev": "concurrently \"yarn run codegen:watch\" \"yarn run dev:server\" \"yarn run dev:client\""
   },
   "dependencies": {
     "graphql": "^15.3.0"
@@ -26,6 +27,7 @@
     "concurrently": "^5.2.0"
   },
   "workspaces": [
-    "server"
+    "server",
+    "client"
   ]
 }
