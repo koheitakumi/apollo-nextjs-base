@@ -15,6 +15,8 @@ const TodoList: React.FC = () => {
 
   return (
     <div>
+      <h2>Task List</h2>
+      {todoQuery.data.todos.length === 0 && <p>🙄Current todo is empty!</p>}
       <ul>
         {todoQuery.data.todos.map(({ id, content }) => (
           <li key={id}>{content}</li>
@@ -31,7 +33,7 @@ const TodoList: React.FC = () => {
           todoQuery.refetch();
         }}
       >
-        追加
+        Add New Task
       </button>
     </div>
   );

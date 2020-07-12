@@ -1,11 +1,13 @@
 type Mutation {
   addTodo(content: String!): Todo!
   deleteTodo(id: Int!): Todo!
+  signUp(user: UserInput!): User!
+  login(user: UserInput!): User!
+  logout: Boolean!
 }
 
 type Query {
   hello: String!
-  viewer: User!
   todos: [Todo!]
 }
 
@@ -15,5 +17,11 @@ type Todo {
 }
 
 type User {
-  name: String!
+  email: String!
+  token: String!
+}
+
+input UserInput {
+  email: String!
+  password: String!
 }

@@ -1,5 +1,4 @@
 type Query {
   hello: String!
-  viewer: User!
   todos: [Todo!]
 }

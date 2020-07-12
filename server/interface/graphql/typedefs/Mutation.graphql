@@ -1,4 +1,7 @@
 type Mutation {
   addTodo(content: String!): Todo!
   deleteTodo(id: Int!): Todo!
+  signUp(user: UserInput!): User!
+  login(user: UserInput!): User!
+  logout: Boolean!
 }

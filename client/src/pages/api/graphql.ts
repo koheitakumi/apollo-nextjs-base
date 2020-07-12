@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
 const GRAPHQL_URL = process.env.GRAPHQL_URL!;
+const AUTH_COOKIE_NAME = process.env.AUTH_COOKIE_NAME!;
 
 interface ApiResponse {
   body: string;
@@ -34,7 +35,7 @@ const forwardHeader = (
 };
 const forwardResponse = (res: NextApiResponse, apiRes: ApiResponse) => {
   forwardHeader(res, apiRes, "content-type");
-  forwardHeader(res, apiRes, "www-authenticate");
+  forwardHeader(res, apiRes, "set-cookie");
   res.status(apiRes.status);
   res.send(apiRes.body);
 };
@@ -42,8 +43,7 @@ const forwardResponse = (res: NextApiResponse, apiRes: ApiResponse) => {
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     // const { idToken } = await auth0.getSession(req);
-    const idToken = req.cookies["key"];
-    console.log("GRAPHQL_URL", GRAPHQL_URL, idToken);
+    const idToken = req.cookies[AUTH_COOKIE_NAME];
     const apiRes = await callAPI(req.body, {
       authorization: idToken ? `Bearer ${idToken}` : "",
     });
