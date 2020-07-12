@@ -1,7 +1,6 @@
 import { AuthenticationError } from "apollo-server-express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import todoStore from "../../db/todoStore";
 import userStore from "../../db/userStore";
 import { MutationResolvers, User } from "../generated/graphql";
 import { JWT_NAME, JWT_SECRET } from "../../../constants";
@@ -29,15 +28,6 @@ function generateToken(user) {
 }
 
 export const Mutation: MutationResolvers = {
-  async addTodo(_parent, args, { user }, _info) {
-    if (!user) {
-      throw new AuthenticationError("Authentication is necessary");
-    }
-    return todoStore.addTodo(args.content);
-  },
-  async deleteTodo(_parent, args, _context, _info) {
-    return todoStore.deleteTodo(args.id);
-  },
   async signUp(_, { user: { email, password } }, { req }) {
     try {
       const hashedPassword = await bcrypt.hash(password, 10);

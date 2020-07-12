@@ -1,23 +1,21 @@
-import fs from "fs";
 import path from "path";
+const { mergeTypeDefs } = require("@graphql-tools/merge");
+const { mergeResolvers } = require("@graphql-tools/merge");
+const { loadFilesSync } = require("@graphql-tools/load-files");
 
 // use generated file
-export const typeDefs = fs
-  .readFileSync(path.join(__dirname, "generated/schema.graphql"))
-  .toString();
+const typesArray = loadFilesSync(path.join(__dirname, "./generated"), {
+  extensions: ["graphql"],
+});
 
-// Load mutations
-const mutations = fs
-  .readdirSync(path.join(__dirname, "mutations"))
-  .map((file) => {
-    return require("./mutations/" + file);
-  })
-  .reduce((acc, functions) => ({ ...acc, ...functions }), {});
+export const typeDefs = mergeTypeDefs(typesArray, { all: true });
 
-// // Load resolvers
-export const resolvers = fs
-  .readdirSync(path.join(__dirname, "resolvers"))
-  .map((file) => {
-    return require("./resolvers/" + file);
-  })
-  .reduce((acc, functions) => ({ ...acc, ...functions }), mutations);
+const mutationsArray = loadFilesSync(path.join(__dirname, "./mutations"), {
+  extensions: ["ts"],
+});
+
+const resolversArray = loadFilesSync(path.join(__dirname, "./resolvers"), {
+  extensions: ["ts"],
+});
+
+export const resolvers = mergeResolvers([...resolversArray, ...mutationsArray]);
