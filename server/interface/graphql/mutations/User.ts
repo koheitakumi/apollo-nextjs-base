@@ -1,7 +1,7 @@
 import { AuthenticationError } from "apollo-server-express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import userStore from "../../db/userStore";
+//import userStore from "../../db/userStore";
 import { MutationResolvers, User } from "../generated/graphql";
 import { JWT_NAME, JWT_SECRET } from "../../../constants";
 
@@ -28,10 +28,10 @@ function generateToken(user) {
 }
 
 export const Mutation: MutationResolvers = {
-  async signUp(_, { user: { email, password } }, { req }) {
+  async signUp(_, { user: { email, password } }, { dataSources, req }) {
     try {
       const hashedPassword = await bcrypt.hash(password, 10);
-      const user = userStore.addUser(email, hashedPassword);
+      const user = dataSources.userDb.addUser(email, hashedPassword);
 
       const token = generateToken(user);
       setCookie({
@@ -47,9 +47,9 @@ export const Mutation: MutationResolvers = {
       throw new AuthenticationError(err);
     }
   },
-  async login(_, { user: { email, password } }, { req }) {
+  async login(_, { user: { email, password } }, { dataSources, req }) {
     try {
-      const user = userStore.findUser(email);
+      const user = dataSources.userDb.findUser(email);
       if (!user) throw "No user in DB";
       const valid = await bcrypt.compare(password, user.password);
       if (!valid) throw "Invalid password";

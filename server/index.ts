@@ -1,8 +1,12 @@
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
+import { makeExecutableSchema } from "graphql-tools";
 import { typeDefs, resolvers } from "./interface/graphql/schema";
 import { verify } from "jsonwebtoken";
 import { JWT_SECRET } from "./constants";
+
+import TodoDb from "./dataSources/TodoDb";
+import UserDb from "./dataSources/UserDb";
 
 const getTokenFromHeaders = (req) => {
   const {
@@ -14,9 +18,14 @@ const getTokenFromHeaders = (req) => {
   return null;
 };
 
+// set up any dataSources our resolvers need
+const dataSources = () => ({
+  todoDb: new TodoDb(),
+  userDb: new UserDb(),
+});
+
 // the function that sets up the global context for each resolver, using the req
 const context = async ({ req }) => {
-  //TODO Authentication
   let user = null;
   const token = getTokenFromHeaders(req);
   try {
@@ -35,7 +44,9 @@ const context = async ({ req }) => {
   return { req, user };
 };
 
-const server = new ApolloServer({ typeDefs, resolvers, context });
+const schema = makeExecutableSchema({ typeDefs, resolvers });
+
+const server = new ApolloServer({ schema, context, dataSources });
 
 const app = express();
 server.applyMiddleware({ app });

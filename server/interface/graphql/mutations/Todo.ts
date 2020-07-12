@@ -1,15 +1,18 @@
 import { AuthenticationError } from "apollo-server-express";
-import todoStore from "../../db/todoStore";
-import { MutationResolvers, User } from "../generated/graphql";
+//import todoStore from "../../db/todoStore";
+import { MutationResolvers } from "../generated/graphql";
 
 export const Mutation: MutationResolvers = {
-  async addTodo(_parent, args, { user }, _info) {
+  async addTodo(_parent, args, { dataSources, user }, _info) {
     if (!user) {
       throw new AuthenticationError("Authentication is necessary");
     }
-    return todoStore.addTodo(args.content);
+    return dataSources.todoDb.addTodo(args.content);
   },
-  async deleteTodo(_parent, args, _context, _info) {
-    return todoStore.deleteTodo(args.id);
+  async deleteTodo(_parent, args, { dataSources, user }, _info) {
+    if (!user) {
+      throw new AuthenticationError("Authentication is necessary");
+    }
+    return dataSources.todoDb.deleteTodo(args.id);
   },
 };
