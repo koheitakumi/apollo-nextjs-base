@@ -1,7 +1,6 @@
 import { AuthenticationError } from "apollo-server-express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-//import userStore from "../../db/userStore";
 import { MutationResolvers, User } from "../generated/graphql";
 import { JWT_NAME, JWT_SECRET } from "../../../constants";
 

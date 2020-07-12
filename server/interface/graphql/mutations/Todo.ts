@@ -1,5 +1,4 @@
 import { AuthenticationError } from "apollo-server-express";
-//import todoStore from "../../db/todoStore";
 import { MutationResolvers } from "../generated/graphql";
 
 export const Mutation: MutationResolvers = {
