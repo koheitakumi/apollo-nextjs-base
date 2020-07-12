@@ -2,16 +2,27 @@ import React, { useState } from "react";
 import {
   useGetTodoQuery,
   useAddTodoMutation,
+  useDeleteTodoMutation,
 } from "libs/graphql/generated/graphql";
 
 const TodoList: React.FC = () => {
   const todoQuery = useGetTodoQuery();
   const [addTodoMutation] = useAddTodoMutation();
+  const [deleteTodoMutation] = useDeleteTodoMutation();
   const [todoValue, setTodoValue] = useState("");
 
   if (todoQuery.loading || !todoQuery.data || !todoQuery.data.todos) {
     return <div>loading</div>;
   }
+
+  const handleDeleteTodo = (id: number) => async () => {
+    await deleteTodoMutation({
+      variables: {
+        id,
+      },
+    });
+    await todoQuery.refetch();
+  };
 
   return (
     <div>
@@ -19,7 +30,10 @@ const TodoList: React.FC = () => {
       {todoQuery.data.todos.length === 0 && <p>🙄Current todo is empty!</p>}
       <ul>
         {todoQuery.data.todos.map(({ id, content }) => (
-          <li key={id}>{content}</li>
+          <li key={id}>
+            <button onClick={handleDeleteTodo(id)}>👍</button>
+            {content}
+          </li>
         ))}
       </ul>
       <input value={todoValue} onChange={(e) => setTodoValue(e.target.value)} />
