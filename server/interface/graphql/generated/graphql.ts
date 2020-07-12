@@ -46,6 +46,11 @@ export type Query = {
   todos?: Maybe<Array<Todo>>;
 };
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  todoAdded: Todo;
+};
+
 export type Todo = {
   __typename?: 'Todo';
   id: Scalars['Int'];
@@ -146,6 +151,7 @@ export type ResolversTypes = {
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Query: ResolverTypeWrapper<{}>;
+  Subscription: ResolverTypeWrapper<{}>;
   Todo: ResolverTypeWrapper<Todo>;
   User: ResolverTypeWrapper<User>;
   UserInput: UserInput;
@@ -158,6 +164,7 @@ export type ResolversParentTypes = {
   Int: Scalars['Int'];
   Boolean: Scalars['Boolean'];
   Query: {};
+  Subscription: {};
   Todo: Todo;
   User: User;
   UserInput: UserInput;
@@ -176,6 +183,10 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   todos?: Resolver<Maybe<Array<ResolversTypes['Todo']>>, ParentType, ContextType>;
 };
 
+export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
+  todoAdded?: SubscriptionResolver<ResolversTypes['Todo'], "todoAdded", ParentType, ContextType>;
+};
+
 export type TodoResolvers<ContextType = any, ParentType extends ResolversParentTypes['Todo'] = ResolversParentTypes['Todo']> = {
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   content?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -191,6 +202,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 export type Resolvers<ContextType = any> = {
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Subscription?: SubscriptionResolvers<ContextType>;
   Todo?: TodoResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
 };

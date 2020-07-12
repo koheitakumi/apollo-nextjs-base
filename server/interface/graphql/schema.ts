@@ -14,8 +14,19 @@ const mutationsArray = loadFilesSync(path.join(__dirname, "./mutations"), {
   extensions: ["ts"],
 });
 
+const subscriptionsArray = loadFilesSync(
+  path.join(__dirname, "./subscriptions"),
+  {
+    extensions: ["ts"],
+  }
+);
+
 const resolversArray = loadFilesSync(path.join(__dirname, "./resolvers"), {
   extensions: ["ts"],
 });
 
-export const resolvers = mergeResolvers([...resolversArray, ...mutationsArray]);
+export const resolvers = mergeResolvers([
+  ...resolversArray,
+  ...mutationsArray,
+  ...subscriptionsArray,
+]);

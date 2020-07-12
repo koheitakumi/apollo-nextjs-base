@@ -11,6 +11,10 @@ type Query {
   todos: [Todo!]
 }
 
+type Subscription {
+  todoAdded: Todo!
+}
+
 type Todo {
   id: Int!
   content: String!
