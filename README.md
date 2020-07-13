@@ -9,6 +9,7 @@
   - Next.js
   - Apollo client
 - Others
+  - Graphql with query, mutation, subscriptions
   - Use graphql-codegen
   - Typescript
 
@@ -47,6 +48,6 @@ npm run dev
   - The token is stored in cookie.
 - Login
 - Logout
-- List, Add, Delete todo.
+- List, Add, Delete and subscribe todo.
 
 That's all, very simple :)
