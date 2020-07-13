@@ -3,6 +3,7 @@ import { DataSource, DataSourceConfig } from "apollo-datasource";
 interface Todo {
   id: number;
   content: string;
+  email: string;
 }
 
 // Just in memory
@@ -24,10 +25,11 @@ class TodoDb extends DataSource {
     return todoList;
   }
 
-  async addTodo(content) {
+  async addTodo(content, email) {
     todoList.push({
       id: id++,
       content,
+      email,
     });
     return todoList[todoList.length - 1];
   }

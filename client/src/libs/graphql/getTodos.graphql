@@ -2,5 +2,6 @@ query getTodo {
   todos {
     id
     content
+    email
   }
 }

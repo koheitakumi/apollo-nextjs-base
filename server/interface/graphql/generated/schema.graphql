@@ -1,5 +1,5 @@
 type Mutation {
-  addTodo(content: String!): Todo!
+  addTodo(todo: TodoInput!): Todo!
   deleteTodo(id: Int!): Todo!
   signUp(user: UserInput!): User!
   login(user: UserInput!): User!
@@ -18,6 +18,12 @@ type Subscription {
 type Todo {
   id: Int!
   content: String!
+  email: String!
+}
+
+input TodoInput {
+  content: String!
+  email: String!
 }
 
 type User {

@@ -15,13 +15,15 @@
     "apollo-cache-inmemory": "^1.6.6",
     "apollo-client": "^2.6.10",
     "apollo-link-http": "^1.5.17",
+    "apollo-link-ws": "^1.0.20",
     "graphql": "^15.3.0",
     "graphql-tag": "^2.10.4",
     "js-cookie": "^2.2.1",
     "next": "^9.4.4",
     "next-auth": "^2.2.0",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "subscriptions-transport-ws": "^0.9.17"
   },
   "devDependencies": {
     "@types/js-cookie": "^2.2.6",

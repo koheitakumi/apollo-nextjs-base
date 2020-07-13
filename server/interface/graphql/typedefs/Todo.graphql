@@ -1,4 +1,10 @@
 type Todo {
   id: Int!
   content: String!
+  email: String!
+}
+
+input TodoInput {
+  content: String!
+  email: String!
 }

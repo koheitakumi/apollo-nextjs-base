@@ -22,7 +22,7 @@ export type Mutation = {
 
 
 export type MutationAddTodoArgs = {
-  content: Scalars['String'];
+  todo: TodoInput;
 };
 
 
@@ -55,6 +55,12 @@ export type Todo = {
   __typename?: 'Todo';
   id: Scalars['Int'];
   content: Scalars['String'];
+  email: Scalars['String'];
+};
+
+export type TodoInput = {
+  content: Scalars['String'];
+  email: Scalars['String'];
 };
 
 export type User = {
@@ -147,12 +153,13 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>;
-  String: ResolverTypeWrapper<Scalars['String']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Query: ResolverTypeWrapper<{}>;
+  String: ResolverTypeWrapper<Scalars['String']>;
   Subscription: ResolverTypeWrapper<{}>;
   Todo: ResolverTypeWrapper<Todo>;
+  TodoInput: TodoInput;
   User: ResolverTypeWrapper<User>;
   UserInput: UserInput;
 };
@@ -160,18 +167,19 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Mutation: {};
-  String: Scalars['String'];
   Int: Scalars['Int'];
   Boolean: Scalars['Boolean'];
   Query: {};
+  String: Scalars['String'];
   Subscription: {};
   Todo: Todo;
+  TodoInput: TodoInput;
   User: User;
   UserInput: UserInput;
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  addTodo?: Resolver<ResolversTypes['Todo'], ParentType, ContextType, RequireFields<MutationAddTodoArgs, 'content'>>;
+  addTodo?: Resolver<ResolversTypes['Todo'], ParentType, ContextType, RequireFields<MutationAddTodoArgs, 'todo'>>;
   deleteTodo?: Resolver<ResolversTypes['Todo'], ParentType, ContextType, RequireFields<MutationDeleteTodoArgs, 'id'>>;
   signUp?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationSignUpArgs, 'user'>>;
   login?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'user'>>;
@@ -190,6 +198,7 @@ export type SubscriptionResolvers<ContextType = any, ParentType extends Resolver
 export type TodoResolvers<ContextType = any, ParentType extends ResolversParentTypes['Todo'] = ResolversParentTypes['Todo']> = {
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   content?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 

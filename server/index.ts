@@ -30,32 +30,32 @@ const dataSources = () => ({
 
 // the function that sets up the global context for each resolver, using the req
 const context = async ({ req, connection }) => {
-  if (connection) {
-    // check connection for metadata
-    return { ...connection.context, pubsub };
-  } else {
-    let user = null;
-    const token = getTokenFromHeaders(req);
-    try {
-      if (token) {
-        await verify(token, JWT_SECRET, async function (err, decoded) {
-          if (!err && decoded) {
-            user = {
-              email: decoded.email,
-            };
-          }
-        });
-      }
-    } catch (err) {
-      console.log("#error", err);
+  let user = null;
+  try {
+    const token = connection ? null : getTokenFromHeaders(req);
+    if (token) {
+      await verify(token, JWT_SECRET, async function (err, decoded) {
+        if (!err && decoded) {
+          user = {
+            email: decoded.email,
+          };
+        }
+      });
     }
-    return { req, user, pubsub };
+  } catch (err) {
+    console.log("#error", err);
   }
+  return { req, user, pubsub };
 };
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });
 
-const server = new ApolloServer({ schema, context, dataSources });
+const server = new ApolloServer({
+  schema,
+  context,
+  dataSources,
+  // playground: false,
+});
 
 const app = express();
 server.applyMiddleware({ app });

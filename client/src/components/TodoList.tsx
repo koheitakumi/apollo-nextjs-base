@@ -1,18 +1,34 @@
 import React, { useState } from "react";
+import { useUser } from "hooks/useUser";
 import {
   useGetTodoQuery,
   useAddTodoMutation,
   useDeleteTodoMutation,
+  useTodoAddedSubscription,
 } from "libs/graphql/generated/graphql";
 
 const TodoList: React.FC = () => {
+  const { user } = useUser();
+
   const todoQuery = useGetTodoQuery();
   const [addTodoMutation] = useAddTodoMutation();
   const [deleteTodoMutation] = useDeleteTodoMutation();
+  const { loading, data, error } = useTodoAddedSubscription();
   const [todoValue, setTodoValue] = useState("");
 
-  if (todoQuery.loading || !todoQuery.data || !todoQuery.data.todos) {
+  if (!user || todoQuery.loading || !todoQuery.data || !todoQuery.data.todos) {
     return <div>loading</div>;
+  }
+
+  if (error) {
+    console.log("Subscription Error", error);
+  }
+  if (data) {
+    console.log("receive data", data);
+    //TODO Bad implementation...
+    if (data.todoAdded.email !== user.email) {
+      todoQuery.refetch();
+    }
   }
 
   const handleDeleteTodo = (id: number) => async () => {
@@ -22,6 +38,18 @@ const TodoList: React.FC = () => {
       },
     });
     await todoQuery.refetch();
+  };
+
+  const handleAddTodo = async (e: React.MouseEvent) => {
+    await addTodoMutation({
+      variables: {
+        todo: {
+          content: todoValue,
+          email: user.email,
+        },
+      },
+    });
+    todoQuery.refetch();
   };
 
   return (
@@ -37,18 +65,7 @@ const TodoList: React.FC = () => {
         ))}
       </ul>
       <input value={todoValue} onChange={(e) => setTodoValue(e.target.value)} />
-      <button
-        onClick={async () => {
-          await addTodoMutation({
-            variables: {
-              content: todoValue,
-            },
-          });
-          todoQuery.refetch();
-        }}
-      >
-        Add New Task
-      </button>
+      <button onClick={handleAddTodo}>Add New Task</button>
     </div>
   );
 };

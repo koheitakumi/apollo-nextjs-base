@@ -1,0 +1,7 @@
+subscription todoAdded {
+  todoAdded {
+    id
+    content
+    email
+  }
+}

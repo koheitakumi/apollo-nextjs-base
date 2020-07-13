@@ -6,9 +6,10 @@ const TODO_ADDED = "TODO_ADDED";
 export const Mutation: MutationResolvers = {
   async addTodo(_parent, args, { dataSources, user, pubsub }, _info) {
     if (!user) {
-      //throw new AuthenticationError("Authentication is necessary");
+      throw new AuthenticationError("Authentication is necessary");
     }
-    const newTodo = await dataSources.todoDb.addTodo(args.content);
+    const { content, email } = args.todo;
+    const newTodo = await dataSources.todoDb.addTodo(content, email);
     pubsub.publish(TODO_ADDED, { todoAdded: newTodo });
     return newTodo;
   },

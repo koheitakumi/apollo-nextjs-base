@@ -23,7 +23,7 @@ export type Mutation = {
 
 
 export type MutationAddTodoArgs = {
-  content: Scalars['String'];
+  todo: TodoInput;
 };
 
 
@@ -47,10 +47,21 @@ export type Query = {
   todos?: Maybe<Array<Todo>>;
 };
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  todoAdded: Todo;
+};
+
 export type Todo = {
   __typename?: 'Todo';
   id: Scalars['Int'];
   content: Scalars['String'];
+  email: Scalars['String'];
+};
+
+export type TodoInput = {
+  content: Scalars['String'];
+  email: Scalars['String'];
 };
 
 export type User = {
@@ -65,7 +76,7 @@ export type UserInput = {
 };
 
 export type AddTodoMutationVariables = Exact<{
-  content: Scalars['String'];
+  todo: TodoInput;
 }>;
 
 
@@ -73,7 +84,7 @@ export type AddTodoMutation = (
   { __typename?: 'Mutation' }
   & { addTodo: (
     { __typename?: 'Todo' }
-    & Pick<Todo, 'id' | 'content'>
+    & Pick<Todo, 'id' | 'content' | 'email'>
   ) }
 );
 
@@ -97,7 +108,7 @@ export type GetTodoQuery = (
   { __typename?: 'Query' }
   & { todos?: Maybe<Array<(
     { __typename?: 'Todo' }
-    & Pick<Todo, 'id' | 'content'>
+    & Pick<Todo, 'id' | 'content' | 'email'>
   )>> }
 );
 
@@ -135,12 +146,24 @@ export type SignUpMutation = (
   ) }
 );
 
+export type TodoAddedSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type TodoAddedSubscription = (
+  { __typename?: 'Subscription' }
+  & { todoAdded: (
+    { __typename?: 'Todo' }
+    & Pick<Todo, 'id' | 'content' | 'email'>
+  ) }
+);
+
 
 export const AddTodoDocument = gql`
-    mutation addTodo($content: String!) {
-  addTodo(content: $content) {
+    mutation addTodo($todo: TodoInput!) {
+  addTodo(todo: $todo) {
     id
     content
+    email
   }
 }
     `;
@@ -159,7 +182,7 @@ export type AddTodoMutationFn = ApolloReactCommon.MutationFunction<AddTodoMutati
  * @example
  * const [addTodoMutation, { data, loading, error }] = useAddTodoMutation({
  *   variables: {
- *      content: // value for 'content'
+ *      todo: // value for 'todo'
  *   },
  * });
  */
@@ -207,6 +230,7 @@ export const GetTodoDocument = gql`
   todos {
     id
     content
+    email
   }
 }
     `;
@@ -330,3 +354,33 @@ export function useSignUpMutation(baseOptions?: ApolloReactHooks.MutationHookOpt
 export type SignUpMutationHookResult = ReturnType<typeof useSignUpMutation>;
 export type SignUpMutationResult = ApolloReactCommon.MutationResult<SignUpMutation>;
 export type SignUpMutationOptions = ApolloReactCommon.BaseMutationOptions<SignUpMutation, SignUpMutationVariables>;
+export const TodoAddedDocument = gql`
+    subscription todoAdded {
+  todoAdded {
+    id
+    content
+    email
+  }
+}
+    `;
+
+/**
+ * __useTodoAddedSubscription__
+ *
+ * To run a query within a React component, call `useTodoAddedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useTodoAddedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTodoAddedSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useTodoAddedSubscription(baseOptions?: ApolloReactHooks.SubscriptionHookOptions<TodoAddedSubscription, TodoAddedSubscriptionVariables>) {
+        return ApolloReactHooks.useSubscription<TodoAddedSubscription, TodoAddedSubscriptionVariables>(TodoAddedDocument, baseOptions);
+      }
+export type TodoAddedSubscriptionHookResult = ReturnType<typeof useTodoAddedSubscription>;
+export type TodoAddedSubscriptionResult = ApolloReactCommon.SubscriptionResult<TodoAddedSubscription>;

@@ -1,6 +1,7 @@
-mutation addTodo($content: String!) {
-  addTodo(content: $content) {
+mutation addTodo($todo: TodoInput!) {
+  addTodo(todo: $todo) {
     id
     content
+    email
   }
 }
